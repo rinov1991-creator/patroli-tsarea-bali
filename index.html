@@ -2,160 +2,170 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Template Presisi Patroli FO</title>
+    <title>Generator Laporan Patroli FO - Bali</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* CSS KHUSUS PRINT UNTUK MENGUNCI UKURAN & POSISI */
+        /* KUNCI FORMAT SESUAI WORD */
         @media print {
-            @page { size: A4; margin: 1.5cm; }
+            @page { size: A4; margin: 2cm; }
             .no-print { display: none !important; }
-            body { background: white; padding: 0; }
-            .print-area { border: none !important; box-shadow: none !important; width: 100% !important; padding: 0 !important; }
+            body { background: white; padding: 0; font-family: "Times New Roman", Times, serif; }
+            .report-container { border: none !important; box-shadow: none !important; width: 100% !important; padding: 0 !important; }
         }
 
-        /* Judul Center Bold */
-        .judul-utama { font-size: 14pt; font-weight: bold; text-align: center; margin-bottom: 20px; text-transform: uppercase; }
+        body { font-family: "Times New Roman", Times, serif; background-color: #475569; padding: 20px; }
+        
+        /* Layout Kertas A4 */
+        .report-container { 
+            background: white; 
+            width: 21cm; 
+            min-height: 29.7cm; 
+            margin: 0 auto; 
+            padding: 2cm; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
 
-        /* Narasi Rata Kiri */
-        .narasi-teks { font-size: 11pt; text-align: justify; line-height: 1.5; margin-bottom: 20px; }
+        /* Judul Center */
+        .header-title { text-align: center; font-weight: bold; font-size: 14pt; text-decoration: none; margin-bottom: 30px; text-transform: uppercase; }
+
+        /* Narasi */
+        .narasi { font-size: 11pt; line-height: 1.5; margin-bottom: 20px; text-align: justify; }
 
         /* Tabel Kegiatan */
-        .table-kegiatan { width: 100%; border-collapse: collapse; margin-bottom: 25px; }
-        .table-kegiatan th { border: 1px solid black; background-color: #f2f2f2; padding: 8px; font-size: 11pt; text-align: center; }
-        .table-kegiatan td { border: 1px solid black; padding: 8px; font-size: 11pt; }
-        .center-td { text-align: center; }
+        .table-kegiatan { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        .table-kegiatan th, .table-kegiatan td { border: 1px solid black; padding: 6px 10px; font-size: 11pt; }
+        .table-kegiatan th { background-color: #f2f2f2; text-align: center; font-weight: bold; }
 
-        /* Tabel Foto & Keterangan Rata Kiri */
-        .table-foto { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        /* Label Foto */
+        .label-foto { font-weight: bold; font-size: 11pt; margin-bottom: 10px; }
+
+        /* Grid Foto Berpasangan */
+        .table-foto { width: 100%; border-collapse: collapse; table-layout: fixed; }
         .table-foto td { border: 1px solid black; width: 50%; padding: 10px; vertical-align: top; }
-        .img-container { width: 7cm; height: 5cm; border: 1px solid #000; margin-bottom: 5px; object-fit: cover; }
-        .ket-foto { font-size: 10pt; text-align: left; margin: 0; padding-top: 5px; } /* Keterangan Rata Kiri */
+        
+        /* Ukuran foto dikunci 7cm lebar sesuai instruksi Word */
+        .img-box { width: 7cm; height: 5cm; border: 0.5px solid #000; display: block; margin: 0 auto; object-fit: cover; }
+        .caption { font-size: 10pt; text-align: left; margin-top: 5px; padding-left: 5px; }
     </style>
 </head>
-<body class="bg-slate-500 p-4">
+<body>
 
-    <div class="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow-lg mb-10 no-print">
-        <h2 class="font-bold border-b pb-2 mb-4">PENGATURAN LAPORAN</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <input type="text" id="in_p1" placeholder="Nama Personil 1" class="border p-3 rounded-lg" oninput="sinkron()">
-            <input type="text" id="in_p2" placeholder="Nama Personil 2" class="border p-3 rounded-lg" oninput="sinkron()">
-            <input type="date" id="in_tgl" class="border p-3 rounded-lg col-span-full" onchange="sinkron()">
+    <div class="max-w-[21cm] mx-auto bg-white p-6 rounded-xl mb-10 no-print shadow-2xl border-t-8 border-red-600">
+        <h2 class="font-black text-xl mb-4 text-red-600">DASHBOARD INPUT PATROLI</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <input type="text" id="p1" placeholder="Nama Personil 1" class="border-2 p-3 rounded-lg focus:border-red-500 outline-none" oninput="update()">
+            <input type="text" id="p2" placeholder="Nama Personil 2" class="border-2 p-3 rounded-lg focus:border-red-500 outline-none" oninput="update()">
+            <input type="date" id="tgl" class="border-2 p-3 rounded-lg focus:border-red-500 outline-none" onchange="update()">
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="bg-slate-100 p-4 rounded-xl">
-                <p class="text-xs font-bold mb-2">ADD KEGIATAN </p>
-                <input type="text" id="k_nama" placeholder="Kegiatan" class="w-full border p-2 mb-2 text-sm">
-                <div class="grid grid-cols-3 gap-2">
-                    <input type="text" id="k_stat" placeholder="Status" class="border p-2 text-sm">
-                    <input type="time" id="k_start" class="border p-2 text-sm">
-                    <input type="time" id="k_end" class="border p-2 text-sm">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="p-4 bg-slate-50 rounded-xl border">
+                <p class="font-bold text-xs mb-2">INPUT KEGIATAN [TABEL 1]</p>
+                <input type="text" id="k_n" placeholder="Nama Kegiatan" class="w-full border p-2 mb-2 text-sm rounded">
+                <div class="flex gap-2">
+                    <input type="text" id="k_s" placeholder="Status" class="w-1/3 border p-2 text-sm rounded">
+                    <input type="time" id="k_st" class="w-1/3 border p-2 text-sm rounded">
+                    <input type="time" id="k_en" class="w-1/3 border p-2 text-sm rounded">
                 </div>
-                <button onclick="tambahK()" class="w-full bg-slate-800 text-white mt-2 py-2 rounded font-bold text-sm">Tambah Baris</button>
+                <button onclick="addK()" class="w-full bg-slate-800 text-white mt-3 py-2 rounded-lg font-bold text-xs uppercase">Tambah Baris</button>
             </div>
 
-            <div class="bg-slate-100 p-4 rounded-xl">
-                <p class="text-xs font-bold mb-2">ADD FOTO (PAIR) </p>
+            <div class="p-4 bg-slate-50 rounded-xl border">
+                <p class="font-bold text-xs mb-2">UPLOAD DOKUMENTASI [TABEL 2]</p>
+                <div class="grid grid-cols-2 gap-2 mb-2">
+                    <input type="file" id="fL" class="text-[10px]">
+                    <input type="file" id="fR" class="text-[10px]">
+                </div>
                 <div class="grid grid-cols-2 gap-2">
-                    <input type="file" id="f1" class="text-[10px]">
-                    <input type="file" id="f2" class="text-[10px]">
-                    <input type="text" id="c1" placeholder="Ket Kiri" class="border p-2 text-sm">
-                    <input type="text" id="c2" placeholder="Ket Kanan" class="border p-2 text-sm">
+                    <input type="text" id="cL" placeholder="Ket. Kiri" class="border p-2 text-xs rounded">
+                    <input type="text" id="cR" placeholder="Ket. Kanan" class="border p-2 text-xs rounded">
                 </div>
-                <button onclick="tambahF()" class="w-full bg-red-600 text-white mt-2 py-2 rounded font-bold text-sm">Tambah Foto</button>
+                <button onclick="addF()" class="w-full bg-red-600 text-white mt-3 py-2 rounded-lg font-bold text-xs uppercase">Sematkan Foto (Pair)</button>
             </div>
         </div>
 
-        <button onclick="window.print()" class="w-full bg-green-600 text-white mt-6 py-4 rounded-xl font-black text-lg shadow-lg">CETAK PDF SEKARANG</button>
+        <button onclick="window.print()" class="w-full bg-green-600 text-white mt-8 py-5 rounded-2xl font-black text-xl shadow-xl hover:scale-[1.02] transition-all">CETAK PDF (FORMAT WORD)</button>
     </div>
 
-    <div class="print-area max-w-[21cm] mx-auto bg-white p-[2cm] shadow-2xl">
-        
-        <div class="judul-utama">DOKUMENTASI PATROLI FIBER OPTIC AREA BALI</div>
-        
-        <div class="narasi-teks">
-            Bersama ini saya <span id="v_p1" class="font-bold">...</span> dan <span id="v_p2" class="font-bold">...</span> melaporkan kegiatan saya yang di laksanakan pada tanggal <span id="v_tgl" class="font-bold">...</span> , dengan detail kegiatan sebagai berikut :
+    <div class="report-container" id="printable">
+        <div class="header-title">DOKUMENTASI PATROLI FIBER OPTIC AREA BALI</div>
+
+        <div class="narasi">
+            Bersama ini saya <span id="v_p1" class="font-bold">...</span> dan <span id="v_p2" class="font-bold">...</span> melaporkan kegiatan saya yang di laksanakan pada tanggal <span id="v_tgl" class="font-bold underline">...</span> , dengan detail kegiatan sebagai berikut :
         </div>
 
         <table class="table-kegiatan">
             <thead>
                 <tr>
-                    <th style="width: 50px;">No</th>
+                    <th style="width: 1cm;">No</th>
                     <th>Kegiatan</th>
-                    <th style="width: 120px;">Status</th>
-                    <th style="width: 90px;">Start</th>
-                    <th style="width: 90px;">End</th>
+                    <th style="width: 3cm;">Status</th>
+                    <th style="width: 2cm;">Start</th>
+                    <th style="width: 2cm;">End</th>
                 </tr>
             </thead>
             <tbody id="v_body_k">
                 </tbody>
         </table>
 
-        <p class="font-bold text-[11pt] mb-2">FOTO – FOTO YANG HARUS DILENGKAPI *note : Sesuai dengan jalur KMZ</p>
+        <div class="label-foto">FOTO – FOTO YANG HARUS DILENGKAPI *note : Sesuai dengan jalur KMZ</div>
 
         <table class="table-foto" id="v_table_f">
             </table>
-
     </div>
 
     <script>
-        let listK = [];
+        let kData = [];
 
-        function sinkron() {
-            document.getElementById('v_p1').innerText = document.getElementById('in_p1').value || '...';
-            document.getElementById('v_p2').innerText = document.getElementById('in_p2').value || '...';
-            document.getElementById('v_tgl').innerText = document.getElementById('in_tgl').value || '...';
+        function update() {
+            document.getElementById('v_p1').innerText = document.getElementById('p1').value || '...';
+            document.getElementById('v_p2').innerText = document.getElementById('p2').value || '...';
+            document.getElementById('v_tgl').innerText = document.getElementById('tgl').value || '...';
         }
 
-        function tambahK() {
-            const data = {
-                n: document.getElementById('k_nama').value,
-                s: document.getElementById('k_stat').value,
-                ts: document.getElementById('k_start').value,
-                te: document.getElementById('k_end').value
-            };
-            listK.push(data);
-            let html = '';
-            listK.forEach((item, i) => {
-                html += `<tr><td class="center-td">${i+1}</td><td>${item.n}</td><td class="center-td">${item.s}</td><td class="center-td">${item.ts}</td><td class="center-td">${item.te}</td></tr>`;
+        function addK() {
+            const d = { n: document.getElementById('k_n').value, s: document.getElementById('k_s').value, st: document.getElementById('k_st').value, en: document.getElementById('k_en').value };
+            if(!d.n) return alert("Isi kegiatan!");
+            kData.push(d);
+            let h = '';
+            kData.forEach((x, i) => {
+                h += `<tr><td style="text-align:center">${i+1}</td><td>${x.n}</td><td style="text-align:center">${x.s}</td><td style="text-align:center">${x.st}</td><td style="text-align:center">${x.en}</td></tr>`;
             });
-            document.getElementById('v_body_k').innerHTML = html;
-            document.getElementById('k_nama').value = "";
+            document.getElementById('v_body_k').innerHTML = h;
+            document.getElementById('k_n').value = '';
         }
 
-        async function tambahF() {
-            const file1 = document.getElementById('f1').files[0];
-            const file2 = document.getElementById('f2').files[0];
-            const cap1 = document.getElementById('c1').value;
-            const cap2 = document.getElementById('c2').value;
+        async function addF() {
+            const f1 = document.getElementById('fL').files[0];
+            const f2 = document.getElementById('fR').files[0];
+            const c1 = document.getElementById('cL').value || '-';
+            const c2 = document.getElementById('cR').value || '-';
 
-            const toBase = f => new Promise(res => {
-                if(!f) return res('');
-                const r = new FileReader();
-                r.onload = e => res(e.target.result);
-                r.readAsDataURL(f);
-            });
+            const toB = f => new Promise(res => { if(!f) return res(''); const r = new FileReader(); r.onload = e => res(e.target.result); r.readAsDataURL(f); });
+            
+            const b1 = await toB(f1);
+            const b2 = await toB(f2);
 
-            const b1 = await toBase(file1);
-            const b2 = await toBase(file2);
+            if(!b1 && !b2) return alert("Upload foto!");
 
             const row = `
                 <tr>
                     <td>
-                        <img src="${b1}" class="img-container">
-                        <p class="ket-foto">${cap1}</p>
+                        <img src="${b1}" class="img-box">
+                        <div class="caption">${c1}</div>
                     </td>
                     <td>
-                        <img src="${b2}" class="img-container">
-                        <p class="ket-foto">${cap2}</p>
+                        <img src="${b2}" class="img-box">
+                        <div class="caption">${c2}</div>
                     </td>
                 </tr>
             `;
             document.getElementById('v_table_f').insertAdjacentHTML('beforeend', row);
             
-            // Clear inputs
-            document.getElementById('f1').value = ""; document.getElementById('f2').value = "";
-            document.getElementById('c1').value = ""; document.getElementById('c2').value = "";
+            // Reset
+            document.getElementById('fL').value=''; document.getElementById('fR').value='';
+            document.getElementById('cL').value=''; document.getElementById('cR').value='';
         }
     </script>
 </body>
