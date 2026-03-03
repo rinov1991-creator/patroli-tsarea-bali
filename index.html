@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator PDF Patroli FO - Bali</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        
+        body { font-family: 'Inter', sans-serif; }
+
+        /* ATURAN CETAK PDF  */
+        @media print {
+            @page { size: A4; margin: 0; }
+            body { background: white; p: 0; }
+            .no-print { display: none !important; }
+            .print-container { 
+                width: 100%; 
+                border: none !important; 
+                box-shadow: none !important; 
+                margin: 0 !important;
+                padding: 1.5cm !important;
+            }
+            table { page-break-inside: auto; }
+            tr { page-break-inside: avoid; page-break-after: auto; }
+            .photo-box { 
+                page-break-inside: avoid; 
+                margin-bottom: 15px; 
+            }
+        }
+
+        /* Styling Tabel Sesuai Template [cite: 3, 5] */
+        .report-table th, .report-table td {
+            border: 1px solid black !important;
+            padding: 8px;
+            font-size: 10pt;
+        }
+        
+        /* Ukuran Foto Max 7cm  */
+        .photo-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body class="bg-slate-200 p-4 md:p-8">
+
+    <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-2xl p-6 mb-10 no-print">
+        <div class="flex items-center space-x-4 mb-6">
+            <div class="bg-red-600 p-3 rounded-2xl text-white font-black italic">FO</div>
+            <h1 class="text-2xl font-black text-slate-800 uppercase tracking-tighter">Patroli Report System</h1>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div class="space-y-1">
+                <label class="text-[10px] font-bold text-slate-400 uppercase">Personil 1</label>
+                <input type="text" id="p1" oninput="updateView()" class="w-full p-3 bg-slate-50 border rounded-xl outline-none focus:border-red-500">
+            </div>
+            <div class="space-y-1">
+                <label class="text-[10px] font-bold text-slate-400 uppercase">Personil 2</label>
+                <input type="text" id="p2" oninput="updateView()" class="w-full p-3 bg-slate-50 border rounded-xl outline-none focus:border-red-500">
+            </div>
+            <div class="space-y-1">
+                <label class="text-[10px] font-bold text-slate-400 uppercase">Tanggal Patroli</label>
+                <input type="date" id="tgl" onchange="updateView()" class="w-full p-3 bg-slate-50 border rounded-xl outline-none focus:border-red-500">
+            </div>
+        </div>
+
+        <div class="bg-slate-50 p-4 rounded-2xl mb-6 border border-dashed border-slate-300">
+            <h2 class="font-bold text-xs uppercase text-slate-500 mb-3">1. Detail Kegiatan</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-3">
+                <input type="text" id="k_nama" placeholder="Kegiatan" class="p-2 border rounded-lg text-sm">
+                <input type="text" id="k_stat" placeholder="Status" class="p-2 border rounded-lg text-sm">
+                <input type="time" id="k_start" class="p-2 border rounded-lg text-sm">
+                <input type="time" id="k_end" class="p-2 border rounded-lg text-sm">
+            </div>
+            <button onclick="tambahKegiatan()" class="bg-slate-800 text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-black">+ Tambah Baris</button>
+        </div>
+
+        <div class="bg-slate-50 p-4 rounded-2xl mb-8 border border-dashed border-slate-300">
+            <h2 class="font-bold text-xs uppercase text-slate-500 mb-3">2. Dokumentasi Foto (Grid 2 Kolom)</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="p-3 bg-white rounded-xl border">
+                    <label class="text-[10px] font-bold block mb-2">Slot Kiri</label>
+                    <input type="file" id="img_L" accept="image/*" class="text-xs mb-2 w-full">
+                    <input type="text" id="cap_L" placeholder="Keterangan Foto Kiri" class="w-full p-2 text-xs border rounded-lg">
+                </div>
+                <div class="p-3 bg-white rounded-xl border">
+                    <label class="text-[10px] font-bold block mb-2">Slot Kanan</label>
+                    <input type="file" id="img_R" accept="image/*" class="text-xs mb-2 w-full">
+                    <input type="text" id="cap_R" placeholder="Keterangan Foto Kanan" class="w-full p-2 text-xs border rounded-lg">
+                </div>
+            </div>
+            <button onclick="simpanFoto()" class="mt-4 bg-red-600 text-white px-6 py-3 rounded-xl text-xs font-bold shadow-lg hover:bg-red-700">Sematkan Dokumentasi</button>
+        </div>
+
+        <button onclick="window.print()" class="w-full bg-green-600 text-white py-5 rounded-2xl font-black uppercase tracking-widest shadow-xl hover:bg-green-700 transition-all flex items-center justify-center space-x-2">
+            <span>CETAK LAPORAN PDF</span>
+        </button>
+    </div>
+
+    <div id="pdf-area" class="max-w-[21cm] mx-auto bg-white p-[1.5cm] shadow-sm border border-slate-300 print-container">
+        
+        <h2 class="text-center font-bold text-lg mb-6 uppercase">DOKUMENTASI PATROLI FIBER OPTIC AREA BALI</h2>
+        
+        <p class="text-[11pt] mb-6 leading-relaxed">
+            Bersama ini saya <span id="v_p1" class="font-bold underline">...</span> dan <span id="v_p2" class="font-bold underline">...</span> 
+            melaporkan kegiatan saya yang dilaksanakan pada tanggal <span id="v_tgl" class="font-bold underline">...</span> , 
+            dengan detail kegiatan sebagai berikut :
+        </p>
+
+        <table class="report-table w-full mb-8">
+            <thead>
+                <tr class="bg-slate-100">
+                    <th class="w-12 text-center">No</th>
+                    <th class="text-center">Kegiatan</th>
+                    <th class="w-24 text-center">Status</th>
+                    <th class="w-20 text-center">Start</th>
+                    <th class="w-20 text-center">End</th>
+                </tr>
+            </thead>
+            <tbody id="v_table_body">
+                </tbody>
+        </table>
+
+        <p class="font-bold text-[10pt] mb-4 uppercase text-slate-700">FOTO – FOTO YANG HARUS DILENGKAPI *note : Sesuai dengan jalur KMZ</p>
+
+        <div id="v_photo_grid" class="grid grid-cols-2 gap-x-4 gap-y-6 items-start">
+            </div>
+
+        <div class="mt-12 flex justify-end no-print-text">
+            <div class="text-center w-64 text-sm">
+                <p>Bali, <span class="v_tgl_sign">...</span></p>
+                <br><br><br><br>
+                <p class="font-bold">( ____________________ )</p>
+                <p class="text-xs">Team Patroli FO</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let listKegiatan = [];
+
+        function updateView() {
+            const p1 = document.getElementById('p1').value || '...';
+            const p2 = document.getElementById('p2').value || '...';
+            const tgl = document.getElementById('tgl').value || '...';
+            
+            document.getElementById('v_p1').innerText = p1;
+            document.getElementById('v_p2').innerText = p2;
+            document.getElementById('v_tgl').innerText = tgl;
+            document.querySelectorAll('.v_tgl_sign').forEach(el => el.innerText = tgl);
+        }
+
+        function tambahKegiatan() {
+            const keg = {
+                n: document.getElementById('k_nama').value,
+                s: document.getElementById('k_stat').value,
+                tS: document.getElementById('k_start').value,
+                tE: document.getElementById('k_end').value
+            };
+            if(!keg.n) return alert("Isi nama kegiatan dulu bre!");
+            listKegiatan.push(keg);
+            renderTabel();
+            document.getElementById('k_nama').value = "";
+        }
+
+        function renderTabel() {
+            const body = document.getElementById('v_table_body');
+            body.innerHTML = listKegiatan.map((item, i) => `
+                <tr>
+                    <td class="text-center">${i+1}</td>
+                    <td>${item.n}</td>
+                    <td class="text-center">${item.s}</td>
+                    <td class="text-center">${item.tS}</td>
+                    <td class="text-center">${item.tE}</td>
+                </tr>
+            `).join('');
+        }
+
+        async function simpanFoto() {
+            const fL = document.getElementById('img_L').files[0];
+            const fR = document.getElementById('img_R').files[0];
+            const capL = document.getElementById('cap_L').value || '-';
+            const capR = document.getElementById('cap_R').value || '-';
+
+            const toBase64 = file => new Promise((resolve) => {
+                if(!file) return resolve(null);
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+            });
+
+            const baseL = await toBase64(fL);
+            const baseR = await toBase64(fR);
+
+            if(!baseL && !baseR) return alert("Upload minimal satu foto bre!");
+
+            const grid = document.getElementById('v_photo_grid');
+            const rowHtml = `
+                <div class="photo-box">
+                    <div class="border border-black h-[180px] bg-slate-50">
+                        ${baseL ? `<img src="${baseL}" class="photo-img">` : ''}
+                    </div>
+                    <p class="text-[10pt] mt-1 leading-tight italic text-left">${capL}</p>
+                </div>
+                <div class="photo-box">
+                    <div class="border border-black h-[180px] bg-slate-50">
+                        ${baseR ? `<img src="${baseR}" class="photo-img">` : ''}
+                    </div>
+                    <p class="text-[10pt] mt-1 leading-tight italic text-left">${capR}</p>
+                </div>
+            `;
+            
+            grid.insertAdjacentHTML('beforeend', rowHtml);
+            
+            // Reset fields
+            document.getElementById('img_L').value = ""; document.getElementById('img_R').value = "";
+            document.getElementById('cap_L').value = ""; document.getElementById('cap_R').value = "";
+        }
+    </script>
+</body>
+</html>
