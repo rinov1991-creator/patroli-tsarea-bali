@@ -3,145 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TS AREA BALI NI KLGG - Report Daily</title>
+    <title>Index Report Patroli - TS Area Bali</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #f0f4f8; font-family: sans-serif; }
-        .card-shadow { box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }
+        body { background-color: #f0f4f8; font-family: 'Inter', sans-serif; }
+        .custom-shadow { box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1); }
+        /* Styling Scrollbar biar cakep */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
     </style>
 </head>
-<body class="py-10 px-4">
+<body class="py-8 px-4 md:px-10">
 
-    <div class="max-w-4xl mx-auto bg-white rounded-3xl overflow-hidden card-shadow">
+    <div class="max-w-6xl mx-auto bg-white rounded-[2rem] overflow-hidden custom-shadow">
         
-        <div class="bg-blue-600 py-6 text-center text-white">
-            <h1 class="text-2xl font-black italic tracking-wider">TS AREA BALI NI KLGG</h1>
-            <p class="text-xs uppercase mt-1 tracking-widest font-semibold">Report Daily System</p>
+        <div class="bg-[#2563eb] py-8 text-center text-white">
+            <h1 class="text-2xl md:text-3xl font-black italic tracking-wider uppercase">TS AREA BALI NI KLGG</h1>
+            <p class="text-[10px] md:text-xs uppercase mt-1 tracking-[0.3em] font-bold opacity-90">Index Report Patroli System</p>
         </div>
 
-        <div class="p-8">
-            <div class="bg-orange-50 border-l-4 border-orange-500 p-4 mb-8">
+        <div class="p-6 md:p-8">
+            
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                <div class="relative flex-1 max-w-md">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                        🔍
+                    </span>
+                    <input type="text" placeholder="Cari Site atau Personil..." 
+                           class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition">
+                </div>
+                
+                <button class="bg-[#2563eb] hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg transition duration-200 uppercase tracking-widest text-xs">
+                    + Tambah Laporan Baru
+                </button>
+            </div>
+
+            <div class="bg-orange-50 border-l-4 border-orange-500 p-4 mb-8 rounded-r-xl">
                 <div class="flex items-start">
-                    <span class="text-orange-600 mr-2">⚠️</span>
+                    <span class="text-orange-600 mr-3 text-lg">⚠️</span>
                     <div>
-                        <p class="text-orange-800 font-bold text-sm uppercase">Perhatikan ini sebelum di isi KLG!!!</p>
-                        <p class="text-orange-700 text-xs mt-1 leading-relaxed">
-                            Catat **SEMUA** aktivitas seharian tanpa kecuali! Mulai dari jam masuk kantor (08.30), jam istirahat, sampai jam pulang. Waktu kosong atau jam 'gabut' pun **WAJIB** diisi. Jangan ada waktu yang bolong!
+                        <p class="text-orange-800 font-bold text-xs uppercase tracking-tight">Informasi Index Patroli</p>
+                        <p class="text-orange-700 text-[11px] mt-1 leading-relaxed">
+                            Menampilkan seluruh aktivitas patroli harian. Pastikan data status sudah **"Done"** sebelum dilaporkan ke pusat. Jangan ada data yang bolong!
                         </p>
-                        <p class="text-orange-800 italic text-xs mt-2 font-semibold">Kalo belum paham tanya lagi klg, jangan diem dan soktau!!!</p>
                     </div>
                 </div>
             </div>
 
-            <form action="#" method="POST" class="space-y-6">
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Tanggal</label>
-                        <input type="date" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Jam Start</label>
-                        <input type="time" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Jam End</label>
-                        <input type="time" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
-                    </div>
-                </div>
+            <div class="overflow-x-auto border border-gray-100 rounded-2xl">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-50 border-b border-gray-100">
+                            <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Tanggal</th>
+                            <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Site / Pelanggan</th>
+                            <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Personil</th>
+                            <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider text-center">Status</th>
+                            <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider text-right">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-50 text-sm">
+                        <tr class="hover:bg-blue-50/30 transition">
+                            <td class="px-6 py-4 font-medium text-gray-600 italic">24/05/2026</td>
+                            <td class="px-6 py-4">
+                                <span class="block font-bold text-gray-800">BTS Ungasan Lt. 2</span>
+                                <span class="text-[10px] text-gray-400">Layanan: Internet Corporate</span>
+                            </td>
+                            <td class="px-6 py-4 text-gray-600 font-semibold">Rinov, Rifky</td>
+                            <td class="px-6 py-4 text-center">
+                                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-[10px] font-bold uppercase">Done</span>
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <button class="text-blue-600 hover:text-blue-800 font-bold text-xs mr-3">Edit</button>
+                                <button class="text-red-400 hover:text-red-600 font-bold text-xs">Hapus</button>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-blue-50/30 transition">
+                            <td class="px-6 py-4 font-medium text-gray-600 italic">24/05/2026</td>
+                            <td class="px-6 py-4">
+                                <span class="block font-bold text-gray-800">POP Sanur Beach</span>
+                                <span class="text-[10px] text-gray-400">Layanan: Backbone Maintenance</span>
+                            </td>
+                            <td class="px-6 py-4 text-gray-600 font-semibold">Supandi, Pande</td>
+                            <td class="px-6 py-4 text-center">
+                                <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-[10px] font-bold uppercase">On Process</span>
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <button class="text-blue-600 hover:text-blue-800 font-bold text-xs mr-3">Edit</button>
+                                <button class="text-red-400 hover:text-red-600 font-bold text-xs">Hapus</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Nama Site / Pelanggan</label>
-                        <input type="text" placeholder="Masukkan nama site..." class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Layanan</label>
-                        <select class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
-                            <option>-- Pilih Layanan --</option>
-                        </select>
-                    </div>
+            <div class="mt-8 flex items-center justify-between border-t border-gray-100 pt-6">
+                <p class="text-xs text-gray-400 font-medium italic">Menampilkan 2 dari 50 data patroli</p>
+                <div class="flex space-x-2">
+                    <button class="px-4 py-2 border border-gray-200 rounded-lg text-xs font-bold text-gray-500 hover:bg-gray-50 transition">Prev</button>
+                    <button class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-bold shadow-md">Next</button>
                 </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Case Klasifikasi</label>
-                        <select class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
-                            <option>-- Pilih Klasifikasi --</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Sub Klasifikasi</label>
-                        <select class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
-                            <option>-- Pilih Case Dulu --</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Problem</label>
-                        <textarea rows="3" placeholder="Wajib diisi kalau ada kendala" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Action</label>
-                        <textarea rows="3" placeholder="lampirkan action sejelas mungkin" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Status</label>
-                        <select class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
-                            <option>Done</option>
-                            <option>On Progress</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Vendor</label>
-                        <select class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
-                            <option>-- Pilih Vendor --</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Personil Lapangan</label>
-                    <div class="border border-gray-100 bg-gray-50/50 rounded-xl p-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <label class="flex items-center space-x-2 text-sm text-gray-700 cursor-pointer">
-                            <input type="checkbox" class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"> <span>Rinov</span>
-                        </label>
-                        <label class="flex items-center space-x-2 text-sm text-gray-700 cursor-pointer">
-                            <input type="checkbox" class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"> <span>Rifky</span>
-                        </label>
-                        <label class="flex items-center space-x-2 text-sm text-gray-700 cursor-pointer">
-                            <input type="checkbox" class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"> <span>Supandi</span>
-                        </label>
-                        <label class="flex items-center space-x-2 text-sm text-gray-700 cursor-pointer">
-                            <input type="checkbox" class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"> <span>Riadi</span>
-                        </label>
-                        <label class="flex items-center space-x-2 text-sm text-gray-700 cursor-pointer">
-                            <input type="checkbox" class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"> <span>Zawaid</span>
-                        </label>
-                        <label class="flex items-center space-x-2 text-sm text-gray-700 cursor-pointer">
-                            <input type="checkbox" class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"> <span>Rian</span>
-                        </label>
-                        <label class="flex items-center space-x-2 text-sm text-gray-700 cursor-pointer">
-                            <input type="checkbox" class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"> <span>Pande</span>
-                        </label>
-                        <label class="flex items-center space-x-2 text-sm text-gray-700 cursor-pointer">
-                            <input type="checkbox" class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"> <span>Dimas</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="pt-4">
-                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg transition duration-200 uppercase tracking-widest text-sm">
-                        Kirim Laporan KLGG
-                    </button>
-                </div>
-
-            </form>
+            </div>
         </div>
     </div>
 
