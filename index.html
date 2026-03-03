@@ -2,32 +2,40 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Generator Laporan Patroli FO - Calibri Edition</title>
+    <title>Patroli FO Bali - Premium Generator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* SETUP FONT & UKURAN */
+        /* CSS KHUSUS OUTPUT PDF (Kaku & Formal) */
         @media print {
             @page { size: A4; margin: 2cm; }
             .no-print { display: none !important; }
-            body { background: white; padding: 0; font-family: "Calibri", sans-serif; }
-            .report-container { border: none !important; box-shadow: none !important; width: 100% !important; padding: 0 !important; }
+            body { background: white !important; padding: 0 !important; font-family: "Calibri", sans-serif !important; }
+            .report-container { border: none !important; box-shadow: none !important; width: 100% !important; padding: 0 !important; margin: 0 !important; }
+            .img-box { width: 7cm !important; height: 5cm !important; border: 0.5px solid black !important; }
         }
 
-        body { font-family: "Calibri", sans-serif; background-color: #475569; padding: 20px; }
+        /* Gaya Font Global untuk Output */
+        .calibri { font-family: "Calibri", sans-serif; }
+
+        /* Dashboard UI (Style Pertama yang Lu Suka) */
+        body { background-color: #0f172a; }
+        .card-input { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 2rem; border: 1px solid rgba(255,255,255,0.2); }
         
+        /* Preview Paper A4 */
         .report-container { 
             background: white; width: 21cm; min-height: 29.7cm; 
             margin: 0 auto; padding: 2cm; position: relative;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        /* Judul Size 16 */
-        .header-title { text-align: center; font-weight: bold; font-size: 16pt; margin-bottom: 30px; text-transform: uppercase; }
+        /* Judul Size 16 Calibri */
+        .header-title { text-align: center; font-weight: bold; font-size: 16pt; margin-bottom: 30px; text-transform: uppercase; color: black; }
 
+        /* Logo 5cm Pojok Kanan */
         .header-logo { position: absolute; top: 1cm; right: 1cm; width: 5cm; height: auto; }
 
-        /* Isi Dokument Size 11 */
-        .narasi, .table-kegiatan, .label-utama, .label-note, .caption { font-size: 11pt; }
+        /* Isi Laporan Size 11 Calibri */
+        .narasi, .table-kegiatan, .label-utama, .label-note, .caption { font-size: 11pt; color: black; }
 
         .narasi { line-height: 1.5; margin-bottom: 20px; text-align: justify; }
 
@@ -35,63 +43,76 @@
         .table-kegiatan th, .table-kegiatan td { border: 1px solid black; padding: 6px 10px; }
         .table-kegiatan th { background-color: #f2f2f2; text-align: center; font-weight: bold; }
 
+        /* Label Foto */
         .foto-label-container { margin-bottom: 15px; }
         .label-utama { font-weight: bold; display: block; }
         .label-note { font-style: italic; font-weight: normal; display: block; margin-top: 2px; }
 
+        /* Grid Foto */
         .table-foto { width: 100%; border-collapse: collapse; table-layout: fixed; }
         .table-foto td { border: 1px solid black; width: 50%; padding: 10px; vertical-align: top; }
-        
         .img-box { width: 7cm; height: 5cm; border: 0.5px solid #000; display: block; margin: 0 auto; object-fit: cover; }
         .caption { text-align: left; margin-top: 8px; line-height: 1.2; }
     </style>
 </head>
-<body>
+<body class="p-4 md:p-10 calibri">
 
-    <div class="max-w-[21cm] mx-auto bg-white p-6 rounded-xl mb-10 no-print shadow-2xl border-t-8 border-orange-500">
-        <h2 class="font-black text-xl mb-4 text-orange-600">DASHBOARD INPUT (CALIBRI)</h2>
+    <div class="max-w-4xl mx-auto card-input p-8 mb-12 no-print shadow-2xl">
+        <div class="flex items-center mb-8 space-x-4">
+            <div class="h-12 w-2 bg-orange-500 rounded-full"></div>
+            <h1 class="text-3xl font-black text-slate-800 tracking-tighter uppercase italic">Patroli FO Bali</h1>
+        </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <input type="text" id="p1" placeholder="Nama Personil 1" class="border-2 p-3 rounded-lg outline-none" oninput="update()">
-            <input type="text" id="p2" placeholder="Nama Personil 2" class="border-2 p-3 rounded-lg outline-none" oninput="update()">
-            <input type="date" id="tgl" class="border-2 p-3 rounded-lg outline-none" onchange="update()">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="space-y-1">
+                <label class="text-[10px] font-bold text-slate-400 uppercase ml-2">Personil 1</label>
+                <input type="text" id="p1" class="w-full p-4 bg-slate-50 border-none rounded-2xl shadow-inner focus:ring-2 focus:ring-orange-500 outline-none transition-all" oninput="update()">
+            </div>
+            <div class="space-y-1">
+                <label class="text-[10px] font-bold text-slate-400 uppercase ml-2">Personil 2</label>
+                <input type="text" id="p2" class="w-full p-4 bg-slate-50 border-none rounded-2xl shadow-inner focus:ring-2 focus:ring-orange-500 outline-none transition-all" oninput="update()">
+            </div>
+            <div class="space-y-1">
+                <label class="text-[10px] font-bold text-slate-400 uppercase ml-2">Tanggal</label>
+                <input type="date" id="tgl" class="w-full p-4 bg-slate-50 border-none rounded-2xl shadow-inner focus:ring-2 focus:ring-orange-500 outline-none transition-all" onchange="update()">
+            </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="p-4 bg-slate-50 rounded-xl border">
-                <p class="font-bold text-xs mb-2 text-slate-500 uppercase">Kegiatan</p>
-                <input type="text" id="k_n" placeholder="Kegiatan" class="w-full border p-2 mb-2 text-sm rounded">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="p-6 bg-slate-900 rounded-[2rem] text-white">
+                <h3 class="text-orange-400 font-bold text-xs uppercase mb-4 tracking-widest">Detail Kegiatan</h3>
+                <input type="text" id="k_n" placeholder="Nama Kegiatan" class="w-full bg-slate-800 border-none p-3 rounded-xl mb-3 text-sm focus:ring-1 focus:ring-orange-500">
                 <div class="flex gap-2">
-                    <input type="text" id="k_s" placeholder="Status" class="w-1/3 border p-2 text-sm rounded">
-                    <input type="time" id="k_st" class="w-1/3 border p-2 text-sm rounded">
-                    <input type="time" id="k_en" class="w-1/3 border p-2 text-sm rounded">
+                    <input type="text" id="k_s" placeholder="Status" class="w-1/3 bg-slate-800 border-none p-3 rounded-xl text-sm">
+                    <input type="time" id="k_st" class="w-1/3 bg-slate-800 border-none p-3 rounded-xl text-sm">
+                    <input type="time" id="k_en" class="w-1/3 bg-slate-800 border-none p-3 rounded-xl text-sm">
                 </div>
-                <button onclick="addK()" class="w-full bg-slate-800 text-white mt-3 py-2 rounded-lg font-bold text-xs">TAMBAH KEGIATAN</button>
+                <button onclick="addK()" class="w-full mt-4 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-bold text-xs transition-all shadow-lg">TAMBAH KE TABEL</button>
             </div>
 
-            <div class="p-4 bg-slate-50 rounded-xl border">
-                <p class="font-bold text-xs mb-2 text-slate-500 uppercase">Dokumentasi</p>
-                <div class="grid grid-cols-2 gap-2 mb-2">
-                    <input type="file" id="fL" class="text-xs">
-                    <input type="file" id="fR" class="text-xs">
+            <div class="p-6 bg-slate-100 rounded-[2rem] border border-slate-200">
+                <h3 class="text-slate-500 font-bold text-xs uppercase mb-4 tracking-widest">Dokumentasi Foto</h3>
+                <div class="grid grid-cols-2 gap-2 mb-3">
+                    <input type="file" id="fL" class="text-[10px] file:mr-2 file:py-1 file:px-2 file:rounded-full file:border-0 file:text-[10px] file:bg-orange-50 file:text-orange-700">
+                    <input type="file" id="fR" class="text-[10px] file:mr-2 file:py-1 file:px-2 file:rounded-full file:border-0 file:text-[10px] file:bg-orange-50 file:text-orange-700">
                 </div>
                 <div class="grid grid-cols-2 gap-2">
-                    <input type="text" id="cL" placeholder="Ket. Kiri" class="border p-2 text-xs rounded">
-                    <input type="text" id="cR" placeholder="Ket. Kanan" class="border p-2 text-xs rounded">
+                    <input type="text" id="cL" placeholder="Ket. Kiri" class="w-full p-2 text-xs border-none rounded-xl shadow-sm">
+                    <input type="text" id="cR" placeholder="Ket. Kanan" class="w-full p-2 text-xs border-none rounded-xl shadow-sm">
                 </div>
-                <button onclick="addF()" class="w-full bg-orange-600 text-white mt-3 py-2 rounded-lg font-bold text-xs">SIMPAN FOTO</button>
+                <button onclick="addF()" class="w-full mt-4 bg-slate-800 hover:bg-black text-white py-3 rounded-xl font-bold text-xs transition-all shadow-lg">SIMPAN PASANGAN FOTO</button>
             </div>
         </div>
 
-        <button onclick="window.print()" class="w-full bg-green-600 text-white mt-8 py-5 rounded-2xl font-black text-xl shadow-xl">CETAK PDF A4</button>
+        <button onclick="window.print()" class="w-full mt-10 bg-gradient-to-r from-orange-500 to-red-600 text-white py-6 rounded-[2rem] font-black text-xl shadow-2xl hover:scale-[1.02] transition-all uppercase tracking-tighter">Cetak PDF Sekarang</button>
     </div>
 
-    <div class="report-container">
+    <div class="report-container calibri shadow-2xl">
         <img src="image_0.png" alt="Logo" class="header-logo">
-        <div class="header-title">DOKUMENTASI PATROLI FIBER OPTIC AREA BALI</div>
+        <div class="header-title"> DOKUMENTASI PATROLI FIBER OPTIC AREA BALI</div>
 
         <div class="narasi">
-            Bersama ini saya <span id="v_p1" class="font-bold">...</span> dan <span id="v_p2" class="font-bold">...</span> melaporkan kegiatan saya yang di laksanakan pada tanggal <span id="v_tgl" class="font-bold underline">...</span> , dengan detail kegiatan sebagai berikut :
+            Bersama ini saya <span id="v_p1" class="font-bold underline">...</span> dan <span id="v_p2" class="font-bold underline">...</span> melaporkan kegiatan saya yang di laksanakan pada tanggal <span id="v_tgl" class="font-bold underline">...</span> , dengan detail kegiatan sebagai berikut :
         </div>
 
         <table class="table-kegiatan">
@@ -108,7 +129,7 @@
         </table>
 
         <div class="foto-label-container">
-            <span class="label-utama">FOTO – FOTO YANG HARUS DILENGKAPI</span>
+            <span class="label-utama"> FOTO – FOTO YANG HARUS DILENGKAPI</span>
             <span class="label-note">*note : Sesuai dengan jalur KMZ</span>
         </div>
 
@@ -116,10 +137,10 @@
     </div>
 
     <script>
-        // Fungsi Auto-Capitalize
+        // Fungsi Auto-Capitalize awal kata
         function cap(text) {
             if (!text) return "...";
-            return text.charAt(0).toUpperCase() + text.slice(1);
+            return text.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
         }
 
         let kData = [];
@@ -134,7 +155,6 @@
             const s = cap(document.getElementById('k_s').value);
             const st = document.getElementById('k_st').value;
             const en = document.getElementById('k_en').value;
-            
             if(!n) return;
             kData.push({n, s, st, en});
             let h = '';
@@ -150,10 +170,8 @@
             const f2 = document.getElementById('fR').files[0];
             const c1 = cap(document.getElementById('cL').value);
             const c2 = cap(document.getElementById('cR').value);
-
             const toB = f => new Promise(res => { if(!f) return res(''); const r = new FileReader(); r.onload = e => res(e.target.result); r.readAsDataURL(f); });
             const b1 = await toB(f1); const b2 = await toB(f2);
-
             const row = `<tr>
                 <td><img src="${b1}" class="img-box"><div class="caption">${c1}</div></td>
                 <td><img src="${b2}" class="img-box"><div class="caption">${c2}</div></td>
