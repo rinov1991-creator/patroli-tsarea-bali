@@ -2,93 +2,92 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Generator Laporan Patroli FO - Bali</title>
+    <title>Generator Laporan Patroli FO - Calibri Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* KUNCI FORMAT SESUAI WORD */
+        /* SETUP FONT & UKURAN */
         @media print {
             @page { size: A4; margin: 2cm; }
             .no-print { display: none !important; }
-            body { background: white; padding: 0; font-family: "Times New Roman", Times, serif; }
+            body { background: white; padding: 0; font-family: "Calibri", sans-serif; }
             .report-container { border: none !important; box-shadow: none !important; width: 100% !important; padding: 0 !important; }
         }
 
-        body { font-family: "Times New Roman", Times, serif; background-color: #475569; padding: 20px; }
+        body { font-family: "Calibri", sans-serif; background-color: #475569; padding: 20px; }
         
-        /* Layout Kertas A4 */
         .report-container { 
-            background: white; 
-            width: 21cm; 
-            min-height: 29.7cm; 
-            margin: 0 auto; 
-            padding: 2cm; 
+            background: white; width: 21cm; min-height: 29.7cm; 
+            margin: 0 auto; padding: 2cm; position: relative;
             box-shadow: 0 0 20px rgba(0,0,0,0.5);
         }
 
-        /* Judul Center */
-        .header-title { text-align: center; font-weight: bold; font-size: 14pt; text-decoration: none; margin-bottom: 30px; text-transform: uppercase; }
+        /* Judul Size 16 */
+        .header-title { text-align: center; font-weight: bold; font-size: 16pt; margin-bottom: 30px; text-transform: uppercase; }
 
-        /* Narasi */
-        .narasi { font-size: 11pt; line-height: 1.5; margin-bottom: 20px; text-align: justify; }
+        .header-logo { position: absolute; top: 1cm; right: 1cm; width: 5cm; height: auto; }
 
-        /* Tabel Kegiatan */
+        /* Isi Dokument Size 11 */
+        .narasi, .table-kegiatan, .label-utama, .label-note, .caption { font-size: 11pt; }
+
+        .narasi { line-height: 1.5; margin-bottom: 20px; text-align: justify; }
+
         .table-kegiatan { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        .table-kegiatan th, .table-kegiatan td { border: 1px solid black; padding: 6px 10px; font-size: 11pt; }
+        .table-kegiatan th, .table-kegiatan td { border: 1px solid black; padding: 6px 10px; }
         .table-kegiatan th { background-color: #f2f2f2; text-align: center; font-weight: bold; }
 
-        /* Label Foto */
-        .label-foto { font-weight: bold; font-size: 11pt; margin-bottom: 10px; }
+        .foto-label-container { margin-bottom: 15px; }
+        .label-utama { font-weight: bold; display: block; }
+        .label-note { font-style: italic; font-weight: normal; display: block; margin-top: 2px; }
 
-        /* Grid Foto Berpasangan */
         .table-foto { width: 100%; border-collapse: collapse; table-layout: fixed; }
         .table-foto td { border: 1px solid black; width: 50%; padding: 10px; vertical-align: top; }
         
-        /* Ukuran foto dikunci 7cm lebar sesuai instruksi Word */
         .img-box { width: 7cm; height: 5cm; border: 0.5px solid #000; display: block; margin: 0 auto; object-fit: cover; }
-        .caption { font-size: 10pt; text-align: left; margin-top: 5px; padding-left: 5px; }
+        .caption { text-align: left; margin-top: 8px; line-height: 1.2; }
     </style>
 </head>
 <body>
 
-    <div class="max-w-[21cm] mx-auto bg-white p-6 rounded-xl mb-10 no-print shadow-2xl border-t-8 border-red-600">
-        <h2 class="font-black text-xl mb-4 text-red-600">DASHBOARD INPUT PATROLI</h2>
+    <div class="max-w-[21cm] mx-auto bg-white p-6 rounded-xl mb-10 no-print shadow-2xl border-t-8 border-orange-500">
+        <h2 class="font-black text-xl mb-4 text-orange-600">DASHBOARD INPUT (CALIBRI)</h2>
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <input type="text" id="p1" placeholder="Nama Personil 1" class="border-2 p-3 rounded-lg focus:border-red-500 outline-none" oninput="update()">
-            <input type="text" id="p2" placeholder="Nama Personil 2" class="border-2 p-3 rounded-lg focus:border-red-500 outline-none" oninput="update()">
-            <input type="date" id="tgl" class="border-2 p-3 rounded-lg focus:border-red-500 outline-none" onchange="update()">
+            <input type="text" id="p1" placeholder="Nama Personil 1" class="border-2 p-3 rounded-lg outline-none" oninput="update()">
+            <input type="text" id="p2" placeholder="Nama Personil 2" class="border-2 p-3 rounded-lg outline-none" oninput="update()">
+            <input type="date" id="tgl" class="border-2 p-3 rounded-lg outline-none" onchange="update()">
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="p-4 bg-slate-50 rounded-xl border">
-                <p class="font-bold text-xs mb-2">INPUT KEGIATAN [TABEL 1]</p>
-                <input type="text" id="k_n" placeholder="Nama Kegiatan" class="w-full border p-2 mb-2 text-sm rounded">
+                <p class="font-bold text-xs mb-2 text-slate-500 uppercase">Kegiatan</p>
+                <input type="text" id="k_n" placeholder="Kegiatan" class="w-full border p-2 mb-2 text-sm rounded">
                 <div class="flex gap-2">
                     <input type="text" id="k_s" placeholder="Status" class="w-1/3 border p-2 text-sm rounded">
                     <input type="time" id="k_st" class="w-1/3 border p-2 text-sm rounded">
                     <input type="time" id="k_en" class="w-1/3 border p-2 text-sm rounded">
                 </div>
-                <button onclick="addK()" class="w-full bg-slate-800 text-white mt-3 py-2 rounded-lg font-bold text-xs uppercase">Tambah Baris</button>
+                <button onclick="addK()" class="w-full bg-slate-800 text-white mt-3 py-2 rounded-lg font-bold text-xs">TAMBAH KEGIATAN</button>
             </div>
 
             <div class="p-4 bg-slate-50 rounded-xl border">
-                <p class="font-bold text-xs mb-2">UPLOAD DOKUMENTASI [TABEL 2]</p>
+                <p class="font-bold text-xs mb-2 text-slate-500 uppercase">Dokumentasi</p>
                 <div class="grid grid-cols-2 gap-2 mb-2">
-                    <input type="file" id="fL" class="text-[10px]">
-                    <input type="file" id="fR" class="text-[10px]">
+                    <input type="file" id="fL" class="text-xs">
+                    <input type="file" id="fR" class="text-xs">
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <input type="text" id="cL" placeholder="Ket. Kiri" class="border p-2 text-xs rounded">
                     <input type="text" id="cR" placeholder="Ket. Kanan" class="border p-2 text-xs rounded">
                 </div>
-                <button onclick="addF()" class="w-full bg-red-600 text-white mt-3 py-2 rounded-lg font-bold text-xs uppercase">Sematkan Foto (Pair)</button>
+                <button onclick="addF()" class="w-full bg-orange-600 text-white mt-3 py-2 rounded-lg font-bold text-xs">SIMPAN FOTO</button>
             </div>
         </div>
 
-        <button onclick="window.print()" class="w-full bg-green-600 text-white mt-8 py-5 rounded-2xl font-black text-xl shadow-xl hover:scale-[1.02] transition-all">CETAK PDF (FORMAT WORD)</button>
+        <button onclick="window.print()" class="w-full bg-green-600 text-white mt-8 py-5 rounded-2xl font-black text-xl shadow-xl">CETAK PDF A4</button>
     </div>
 
-    <div class="report-container" id="printable">
+    <div class="report-container">
+        <img src="image_0.png" alt="Logo" class="header-logo">
         <div class="header-title">DOKUMENTASI PATROLI FIBER OPTIC AREA BALI</div>
 
         <div class="narasi">
@@ -100,37 +99,47 @@
                 <tr>
                     <th style="width: 1cm;">No</th>
                     <th>Kegiatan</th>
-                    <th style="width: 3cm;">Status</th>
-                    <th style="width: 2cm;">Start</th>
-                    <th style="width: 2cm;">End</th>
+                    <th style="width: 3.5cm;">Status</th>
+                    <th style="width: 2.2cm;">Start</th>
+                    <th style="width: 2.2cm;">End</th>
                 </tr>
             </thead>
-            <tbody id="v_body_k">
-                </tbody>
+            <tbody id="v_body_k"></tbody>
         </table>
 
-        <div class="label-foto">FOTO – FOTO YANG HARUS DILENGKAPI *note : Sesuai dengan jalur KMZ</div>
+        <div class="foto-label-container">
+            <span class="label-utama">FOTO – FOTO YANG HARUS DILENGKAPI</span>
+            <span class="label-note">*note : Sesuai dengan jalur KMZ</span>
+        </div>
 
-        <table class="table-foto" id="v_table_f">
-            </table>
+        <table class="table-foto" id="v_table_f"></table>
     </div>
 
     <script>
-        let kData = [];
+        // Fungsi Auto-Capitalize
+        function cap(text) {
+            if (!text) return "...";
+            return text.charAt(0).toUpperCase() + text.slice(1);
+        }
 
+        let kData = [];
         function update() {
-            document.getElementById('v_p1').innerText = document.getElementById('p1').value || '...';
-            document.getElementById('v_p2').innerText = document.getElementById('p2').value || '...';
+            document.getElementById('v_p1').innerText = cap(document.getElementById('p1').value);
+            document.getElementById('v_p2').innerText = cap(document.getElementById('p2').value);
             document.getElementById('v_tgl').innerText = document.getElementById('tgl').value || '...';
         }
 
         function addK() {
-            const d = { n: document.getElementById('k_n').value, s: document.getElementById('k_s').value, st: document.getElementById('k_st').value, en: document.getElementById('k_en').value };
-            if(!d.n) return alert("Isi kegiatan!");
-            kData.push(d);
+            const n = cap(document.getElementById('k_n').value);
+            const s = cap(document.getElementById('k_s').value);
+            const st = document.getElementById('k_st').value;
+            const en = document.getElementById('k_en').value;
+            
+            if(!n) return;
+            kData.push({n, s, st, en});
             let h = '';
             kData.forEach((x, i) => {
-                h += `<tr><td style="text-align:center">${i+1}</td><td>${x.n}</td><td style="text-align:center">${x.s}</td><td style="text-align:center">${x.st}</td><td style="text-align:center">${x.en}</td></tr>`;
+                h += `<tr><td align="center">${i+1}</td><td>${x.n}</td><td align="center">${x.s}</td><td align="center">${x.st}</td><td align="center">${x.en}</td></tr>`;
             });
             document.getElementById('v_body_k').innerHTML = h;
             document.getElementById('k_n').value = '';
@@ -139,32 +148,17 @@
         async function addF() {
             const f1 = document.getElementById('fL').files[0];
             const f2 = document.getElementById('fR').files[0];
-            const c1 = document.getElementById('cL').value || '-';
-            const c2 = document.getElementById('cR').value || '-';
+            const c1 = cap(document.getElementById('cL').value);
+            const c2 = cap(document.getElementById('cR').value);
 
             const toB = f => new Promise(res => { if(!f) return res(''); const r = new FileReader(); r.onload = e => res(e.target.result); r.readAsDataURL(f); });
-            
-            const b1 = await toB(f1);
-            const b2 = await toB(f2);
+            const b1 = await toB(f1); const b2 = await toB(f2);
 
-            if(!b1 && !b2) return alert("Upload foto!");
-
-            const row = `
-                <tr>
-                    <td>
-                        <img src="${b1}" class="img-box">
-                        <div class="caption">${c1}</div>
-                    </td>
-                    <td>
-                        <img src="${b2}" class="img-box">
-                        <div class="caption">${c2}</div>
-                    </td>
-                </tr>
-            `;
+            const row = `<tr>
+                <td><img src="${b1}" class="img-box"><div class="caption">${c1}</div></td>
+                <td><img src="${b2}" class="img-box"><div class="caption">${c2}</div></td>
+            </tr>`;
             document.getElementById('v_table_f').insertAdjacentHTML('beforeend', row);
-            
-            // Reset
-            document.getElementById('fL').value=''; document.getElementById('fR').value='';
             document.getElementById('cL').value=''; document.getElementById('cR').value='';
         }
     </script>
